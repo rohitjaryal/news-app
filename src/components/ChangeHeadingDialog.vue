@@ -1,6 +1,9 @@
 <template>
   <v-row justify="space-around">
     <v-dialog v-model="isOpen" persistent class="w-25">
+      <!--      <template v-slot:activator="{ props }">-->
+      <!--        <v-btn color="primary" v-bind="props">Change Heading</v-btn>-->
+      <!--      </template>-->
       <v-card>
         <v-card-title>
           <span class="text-h5">Change Heading</span>
@@ -8,12 +11,12 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="1" sm="6" md="4">
-                <v-label>Heading</v-label>
+              <v-col cols="1" sm="6" md="12">
+                <span>{{ openedArticle?.title }}</span>
               </v-col> </v-row
             ><v-row>
-              <v-col cols="1" sm="6" md="4">
-                <v-text-field label="Heading"></v-text-field>
+              <v-col cols="1" sm="6" md="12">
+                <v-textarea v-model="newHeading"></v-textarea>
               </v-col>
             </v-row>
           </v-container>
@@ -21,7 +24,9 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue-darken-1" variant="text" @click="isOpen = false"> Close </v-btn>
-          <v-btn color="blue-darken-1" variant="text" @click="isOpen = false"> Save </v-btn>
+          <v-btn color="blue-darken-1" variant="text" @click="handleHeadingChange(openedArticle)">
+            Save
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -32,9 +37,19 @@
 import useChangeHeadingStore from '../stores/changeHeading.store.ts';
 import './ChangeHeadingDialog.vue';
 import { storeToRefs } from 'pinia';
+import { ref } from 'vue';
 
 const changeHeadingStore = useChangeHeadingStore();
-const { isOpen } = storeToRefs(changeHeadingStore);
+const { isOpen, openedArticle } = storeToRefs(changeHeadingStore);
+
+const newHeading = ref('');
+
+const emit = defineEmits(['headingChange']);
+
+function handleHeadingChange(article) {
+  emit('headingChange', newHeading.value, article.articleId);
+  newHeading.value = '';
+}
 </script>
 
 <script lang="ts">

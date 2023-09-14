@@ -6,12 +6,7 @@
   </v-card>
 </template>
 
-<script setup>
-const props = defineProps(['title', 'label']);
-</script>
-
 <script>
-console.log('old');
 export default {
   name: 'Card'
 };

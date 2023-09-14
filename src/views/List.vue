@@ -49,19 +49,19 @@
             >
               <span @click="navigate">Read more</span>
             </router-link>
-            <v-label @click.prevent="changeHeadingStore.isOpen = true"> Change Heading</v-label>
+            <v-label @click.prevent="handleChangeHeadingDialog(data)">Change Heading</v-label>
           </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
   </v-container>
   <teleport to="body"> <app-loader /></teleport>
-  <teleport to="body"> <change-heading-dialog /> /></teleport>
+  <teleport to="body"> <change-heading-dialog @headingChange="saveNewHeading" /> /></teleport>
 </template>
 
 <script setup>
 import { debounce } from 'lodash';
-import { getSources, getTopHeadlines } from '@/apis/list.api.ts';
+import { getSources } from '@/apis/list.api.ts';
 import { onMounted, ref, watch } from 'vue';
 import useLoaderStore from '@/stores/loader.store.ts';
 import AppLoader from '@/components/Loader.vue';
@@ -120,6 +120,20 @@ function showDialog() {
 
 function handleReadMore(articleId) {
   router.push('/detail/:');
+}
+
+function handleChangeHeadingDialog(article) {
+  changeHeadingStore.isOpen = true;
+  changeHeadingStore.openedArticle = article;
+}
+
+function saveNewHeading(newHeading, articleId) {
+  console.log('saveNewHeading:>>', newHeading, articleId);
+  newsStore.data[articleId] = {
+    ...newsStore.data[articleId],
+    title: newHeading
+  };
+  changeHeadingStore.isOpen = false;
 }
 </script>
 

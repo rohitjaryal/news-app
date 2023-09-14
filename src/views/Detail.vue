@@ -32,13 +32,7 @@ const articleId = router.currentRoute.value.params?.id;
 const currentArticle = ref(newsStore.data?.[articleId] || {});
 
 onMounted(() => {
-  const visitedHeadlineExist = newsStore.visitedHeadlines.find(
-    (headline) => headline.title === currentArticle.value.title
-  );
-  if (!visitedHeadlineExist && currentArticle.value) {
-    newsStore.visitedHeadlines.push(currentArticle.value);
-  }
-  console.log('test:>>', newsStore.visitedHeadlines, visitedHeadlineExist, currentArticle.title);
+  newsStore.markArticleAsVisited(articleId);
 });
 </script>
 

@@ -7,12 +7,11 @@
         </template>
         <template v-slot:default="{ isActive }">
           <v-card>
-            <v-toolbar color="primary" title="Visited news pages"></v-toolbar>
+            <v-toolbar color="primary" title="Visited pages"></v-toolbar>
             <v-card-text>
-              <v-list lines="two">
-                <v-list-subheader inset>Visited pages</v-list-subheader>
+              <v-list lines="one">
                 <v-list-item
-                  v-for="headline in historyList"
+                  v-for="headline in orderedVisitedHeadlines"
                   :key="headline.title"
                   :title="headline.title"
                   :subtitle="headline.subtitle"
@@ -37,13 +36,18 @@
 </template>
 
 <script setup lang="ts">
-import useNewsStore from '../stores/news.store.ts';
 import { computed } from 'vue';
+import { storeToRefs } from 'pinia';
+import useNewsStore from '../stores/news.store.ts';
 
 const newsStore = useNewsStore();
+const { orderedVisitedHeadlines } = storeToRefs(newsStore);
+
 const historyList = computed(() => {
   return newsStore.visitedHeadlines.reverse();
 });
+
+console.log('historyList:>', historyList.value, orderedVisitedHeadlines.value);
 </script>
 
 <script lang="ts">
