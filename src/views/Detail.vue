@@ -1,27 +1,3 @@
-<!--<template>-->
-<!--  <body>-->
-<!--    <main class="details-container">-->
-<!--      <div class="column">-->
-<!--        <div class="head">-->
-<!--          <span class="headline hl1">{{ currentArticle.title }} </span>-->
-<!--          <p>-->
-<!--            <span class="headline hl4">By {{ currentArticle.author }}</span>-->
-<!--          </p>-->
-<!--        </div>-->
-<!--        <div class="description-container">-->
-<!--          <p class="description-text">-->
-<!--            {{ currentArticle.description }}-->
-<!--          </p>-->
-<!--        </div>-->
-
-<!--        <p class="content">-->
-<!--          {{ currentArticle.content }}-->
-<!--        </p>-->
-<!--      </div>-->
-<!--    </main>-->
-<!--  </body>-->
-<!--</template>-->
-
 <template>
   <body>
     <div class="news-container">
@@ -30,9 +6,16 @@
       <h2 class="news-subtitle">{{ currentArticle.description }}</h2>
 
       <div class="article-meta-info">
-        <span>By {{ currentArticle.author }} Published {{ currentArticle.timePublishedAgo }}</span>
-        <span
-          >News Source
+        <span class="published-at"
+          >By {{ currentArticle.author }} &nbsp;&nbsp;
+
+          <v-chip variant="outlined">
+            Published
+            {{ currentArticle.timePublishedAgo }}
+          </v-chip></span
+        >
+        <span class="news-source"
+          >Visit source article
           <a :href="currentArticle.url" target="_blank">{{ currentArticle.source?.name }} </a>
         </span>
       </div>
@@ -117,5 +100,13 @@ body {
   margin: 25px 0 0;
   padding: 15px 0 20px;
   width: 100%;
+
+  .published-at {
+    font-weight: 200;
+  }
+
+  .news-source {
+    font-weight: 200;
+  }
 }
 </style>

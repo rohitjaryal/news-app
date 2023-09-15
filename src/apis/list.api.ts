@@ -418,3 +418,7 @@ export const getSources = once(async (): Promise<SourceResponse> => {
   // return fetchRequest.get('v2/sources');
   return new Promise((resolve, reject) => resolve(sourcesDummy));
 });
+
+export const getErrorApiCall = async (): Promise<HeadlineResponse> => {
+  return fetchRequest.get('v2/top-headlines/does-not-exist');
+};

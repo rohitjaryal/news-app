@@ -1,37 +1,58 @@
 import { defineStore } from 'pinia';
-import { getTopHeadlines } from '../apis/list.api.ts';
-import helper from '@/includes/helper';
-export default defineStore('newsData', {
-  state: () => ({
-    data: [],
-    visitedHeadlines: []
-  }),
-  actions: {
-    async getHeadlinesData(payload) {
-      const response = await getTopHeadlines(payload);
-      this.data = response?.data?.articles.map((info, index) => ({
-        ...info,
-        articleId: index,
-        timePublishedAgo: helper.convertTimeStampToTimeAgo(info.publishedAt)
-      }));
-    },
-    markArticleAsVisited(articleId) {
-      const visitedHeadline = this.visitedHeadlines.find(
-        (headline) => headline.title === this.data[articleId].title
-      );
+import { getErrorApiCall, getTopHeadlines } from '../apis/list.api.ts';
+import useNotificationStore from '@/stores/notification.store.ts';
 
-      if (!visitedHeadline) {
-        this.visitedHeadlines.push({ ...this.data[articleId], visitedAt: new Date() });
-      }
-    }
-  },
-  getters: {
-    getArticle(articleId) {
-      return this.data?.[articleId] || {};
-    },
-    orderedVisitedHeadlines() {
-      return this.visitedHeadlines.sort((a, b) => new Date(b.visitedAt) - new Date(a.visitedAt));
-    },
-    updateHeading(title) {}
+import helper from '@/includes/helper';
+import { computed, ref } from 'vue';
+export default defineStore('newsData', () => {
+  const data = ref([]);
+  const visitedHeadlines = ref([]);
+
+  async function getHeadlinesData(payload) {
+    const response = await getTopHeadlines(payload);
+    data.value = response?.data?.articles.map((info, index) => ({
+      ...info,
+      articleId: index,
+      timePublishedAgo: helper.convertTimeStampToTimeAgo(info.publishedAt)
+    }));
   }
+
+  function markArticleAsVisited(articleId) {
+    const visitedHeadline = visitedHeadlines.value.find(
+      (headline) => headline.title === data.value[articleId].title
+    );
+
+    if (!visitedHeadline) {
+      visitedHeadlines.value.push({ ...data.value[articleId], visitedAt: new Date() });
+    }
+  }
+
+  async function errorApiCall() {
+    const notificationStore = useNotificationStore();
+    try {
+      await getErrorApiCall();
+    } catch (error) {
+      console.error(error);
+      notificationStore.showAlert({
+        isOpen: true,
+        text: 'Something went wrong!',
+        type: 'error'
+      });
+    }
+  }
+
+  const orderedVisitedHeadlines = computed(() => {
+    return visitedHeadlines.value.sort(
+      (a, b) => new Date(b.visitedAt).getTime() - new Date(a.visitedAt).getTime()
+    );
+  });
+
+  return {
+    data,
+    visitedHeadlines,
+    errorApiCall,
+    markArticleAsVisited,
+    orderedVisitedHeadlines,
+    getHeadlinesData
+  };
 });
