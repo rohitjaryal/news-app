@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { getTopHeadlines } from '../apis/list.api.ts';
-
+import helper from '@/includes/helper';
 export default defineStore('newsData', {
   state: () => ({
     data: [],
@@ -11,7 +11,8 @@ export default defineStore('newsData', {
       const response = await getTopHeadlines(payload);
       this.data = response?.data?.articles.map((info, index) => ({
         ...info,
-        articleId: index
+        articleId: index,
+        timePublishedAgo: helper.convertTimeStampToTimeAgo(info.publishedAt)
       }));
     },
     markArticleAsVisited(articleId) {
@@ -30,6 +31,7 @@ export default defineStore('newsData', {
     },
     orderedVisitedHeadlines() {
       return this.visitedHeadlines.sort((a, b) => new Date(b.visitedAt) - new Date(a.visitedAt));
-    }
+    },
+    updateHeading(title) {}
   }
 });

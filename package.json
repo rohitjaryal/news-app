@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^1.5.0",
+    "dayjs": "^1.11.9",
     "lodash": "^4.17.21",
     "pinia": "^2.1.6",
     "vue": "^3.3.4",
@@ -17,6 +18,7 @@
     "vuetify": "^3.3.15"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^6.4.2",
     "@rushstack/eslint-patch": "^1.2.0",
     "@types/node": "^20.6.0",
     "@vitejs/plugin-vue": "^4.2.3",

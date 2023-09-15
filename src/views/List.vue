@@ -12,7 +12,6 @@
             item-title="name"
             item-value="id"
             multiple
-            variant="outlined"
           ></v-autocomplete>
         </v-col>
 
@@ -29,27 +28,32 @@
       </v-row>
     </v-container>
   </v-form>
-  <v-container class="bg-grey-lighten-1" v-show="!newsStore.data.length">
+  <v-container v-show="!newsStore.data.length">
     <h3>Sorry, no news are available.</h3>
   </v-container>
-  <v-container class="bg-grey-lighten-1">
+  <v-container>
     <v-row>
       <v-col v-for="data in newsStore.data" :key="data.articleId" cols="12" sm="4">
         <v-card
-          :title="data.title"
+          rounded
+          :title="data.newTitle || data.title"
           :subtitle="data.source.name"
           :text="data.description"
-          variant="outlined"
+          variant="tonal"
+          height="100%"
+          class="card-outer"
         >
-          <v-card-actions>
+          <v-card-actions class="card-actions">
             <router-link
               custom
               :to="{ name: 'detail', params: { id: data.articleId } }"
               v-slot="{ navigate }"
             >
-              <span @click="navigate">Read more</span>
+              <v-btn variant="outlined" color="#f99d1c" @click="navigate">Read more </v-btn>
             </router-link>
-            <v-label @click.prevent="handleChangeHeadingDialog(data)">Change Heading</v-label>
+            <v-btn variant="plain" color="#f99d1c" @click.prevent="handleChangeHeadingDialog(data)"
+              >Change Heading</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-col>
@@ -63,7 +67,6 @@
 import { debounce } from 'lodash';
 import { getSources } from '@/apis/list.api.ts';
 import { onMounted, ref, watch } from 'vue';
-import useLoaderStore from '@/stores/loader.store.ts';
 import AppLoader from '@/components/Loader.vue';
 import { useRouter } from 'vue-router';
 import useNewsStore from '@/stores/news.store.ts';
@@ -74,15 +77,16 @@ import ChangeHeadingDialog from '@/components/ChangeHeadingDialog.vue';
 const sources = ref('');
 const searchHeadlineText = ref('');
 const allAvailableSources = ref([]);
-const router = useRouter();
 const newsStore = useNewsStore();
 const changeHeadingStore = useChangeHeadingStore();
 
-// router.beforeEach((to, from, next) => {
-//   console.log('xxx:>', to, from);
-//   const articleId = to.params.id;
-//   next();
-// });
+const router = useRouter();
+
+router.afterEach((to, from, next) => {
+  console.log('xxx:>', to, from);
+  const articleId = to.params.id;
+  next();
+});
 
 const userInputDebounced = debounce(
   (params) =>
@@ -112,29 +116,29 @@ onMounted(async () => {
   newsStore.getHeadlinesData({});
 });
 
-const loaderStore = useLoaderStore();
-
-function showDialog() {
-  loaderStore.isLoading = true;
-}
-
-function handleReadMore(articleId) {
-  router.push('/detail/:');
-}
-
 function handleChangeHeadingDialog(article) {
   changeHeadingStore.isOpen = true;
   changeHeadingStore.openedArticle = article;
 }
 
 function saveNewHeading(newHeading, articleId) {
-  console.log('saveNewHeading:>>', newHeading, articleId);
   newsStore.data[articleId] = {
     ...newsStore.data[articleId],
-    title: newHeading
+    newTitle: newHeading
   };
   changeHeadingStore.isOpen = false;
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.card-outer {
+  padding-bottom: 50px;
+}
+.card-actions {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+</style>

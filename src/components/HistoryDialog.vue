@@ -1,26 +1,26 @@
 <template>
-  <v-row justify="space-around">
+  <v-row>
     <v-col cols="auto">
-      <v-dialog transition="dialog-top-transition" width="auto">
+      <v-dialog transition="dialog-top-transition">
         <template v-slot:activator="{ props }">
-          <v-btn color="primary" v-bind="props">History</v-btn>
+          <v-btn
+            variant="text"
+            class="bg-amber-accent-4"
+            :disabled="!orderedVisitedHeadlines.length"
+            v-bind="props"
+            >Visited headline</v-btn
+          >
         </template>
         <template v-slot:default="{ isActive }">
           <v-card>
-            <v-toolbar color="primary" title="Visited pages"></v-toolbar>
+            <v-toolbar title="Visited pages"></v-toolbar>
             <v-card-text>
-              <v-list lines="one">
-                <v-list-item
-                  v-for="headline in orderedVisitedHeadlines"
-                  :key="headline.title"
-                  :title="headline.title"
-                  :subtitle="headline.subtitle"
-                >
+              <v-list>
+                <v-list-item v-for="headline in orderedVisitedHeadlines" :key="headline.title">
                   <template v-slot:prepend>
-                    <v-card-text>{{ headline?.source?.name }}</v-card-text>
-                  </template>
-                  <template v-slot:append>
-                    <v-btn color="grey-lighten-1" icon="mdi-information" variant="text"></v-btn>
+                    <v-list-item-subtitle v-text="headline?.source?.name"></v-list-item-subtitle>
+                    <v-list-item-title class="pa-3" v-text="headline.title"></v-list-item-title>
+                    <v-icon color="green-darken-2" icon="mdi-domain"></v-icon>
                   </template>
                 </v-list-item>
               </v-list>

@@ -1,12 +1,9 @@
 <template>
-  <v-app-bar :elevation="6" color="grey" density="compact" rounded>
-    <v-app-bar-title>News</v-app-bar-title>
+  <v-app-bar :elevation="6" class="fg-amber-accent-4" density="compact" rounded>
+    <v-btn class="news-header" @click.prevent="router.push({ name: 'list' })">News</v-btn>
+
     <template v-slot:append>
-      <v-btn
-        v-show="router.currentRoute.value.name === 'detail'"
-        icon="mdi-heart"
-        @click.prevent="router.push({ name: 'list' })"
-      >
+      <v-btn v-show="router.currentRoute.value.name === 'detail'" @click.prevent="router.back()">
         Back
       </v-btn>
     </template>
@@ -23,4 +20,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.news-header {
+  color: #f99d1c;
+  font-weight: bold;
+  font-size: 22px;
+}
+</style>

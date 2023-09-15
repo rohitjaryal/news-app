@@ -1,25 +1,50 @@
+<!--<template>-->
+<!--  <body>-->
+<!--    <main class="details-container">-->
+<!--      <div class="column">-->
+<!--        <div class="head">-->
+<!--          <span class="headline hl1">{{ currentArticle.title }} </span>-->
+<!--          <p>-->
+<!--            <span class="headline hl4">By {{ currentArticle.author }}</span>-->
+<!--          </p>-->
+<!--        </div>-->
+<!--        <div class="description-container">-->
+<!--          <p class="description-text">-->
+<!--            {{ currentArticle.description }}-->
+<!--          </p>-->
+<!--        </div>-->
+
+<!--        <p class="content">-->
+<!--          {{ currentArticle.content }}-->
+<!--        </p>-->
+<!--      </div>-->
+<!--    </main>-->
+<!--  </body>-->
+<!--</template>-->
+
 <template>
   <body>
-    <main class="details-container">
-      <div class="collumn">
-        <div class="head">
-          <span class="headline hl1">{{ currentArticle.title }} </span>
-          <p>
-            <span class="headline hl4">By {{ currentArticle.author }}</span>
-          </p>
-        </div>
-        <p>
-          {{ currentArticle.description }}
-        </p>
+    <div class="news-container">
+      <h1 class="news-title">{{ currentArticle.title }}</h1>
+      <img :src="currentArticle.urlToImage" :alt="currentArticle.title" class="news-image" />
+      <h2 class="news-subtitle">{{ currentArticle.description }}</h2>
 
+      <div class="article-meta-info">
+        <span>By {{ currentArticle.author }} Published {{ currentArticle.timePublishedAgo }}</span>
+        <span
+          >News Source
+          <a :href="currentArticle.url" target="_blank">{{ currentArticle.source?.name }} </a>
+        </span>
+      </div>
+
+      <div class="news-article">
         <p>
           {{ currentArticle.content }}
         </p>
       </div>
-    </main>
+    </div>
   </body>
 </template>
-
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import useNewsStore from '../stores/news.store.ts';
@@ -38,71 +63,59 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 body {
-  background: #f6f6f6;
-}
-
-.collumn {
-  font-size: 14px;
-  line-height: 20px;
-  width: 70.5%;
-  display: inline-block;
-  padding: 0 1% 0 1%;
-  vertical-align: top;
-  margin-bottom: 50px;
-  transition: all 0.7s;
-}
-
-p {
-  margin-top: 0;
-  margin-bottom: 20px;
-}
-
-.headline {
-  text-align: center;
-  line-height: normal;
-  font-family: 'Playfair Display', serif;
-  display: block;
-  margin: 0 auto;
-
-  &.hl1 {
-    font-weight: 700;
-    font-size: 30px;
-    //text-transform: uppercase;
-    padding: 10px 0 10px 0;
-  }
-
-  &.hl4 {
-    font-weight: 700;
-    font-size: 12px;
-    box-sizing: border-box;
-    padding: 10px 0 10px 0;
-  }
-}
-
-main {
-  font-family: 'Lexend Deca', sans-serif;
-  background: #ffffff;
+  margin: 0;
+  padding: 0;
   display: flex;
-  flex-direction: column;
-  //flex-wrap: wrap;
-  //justify-content: center;
-  //align-items: center;
-  //align-content: space-between;
-  width: 76vw;
-  margin-left: 12vw;
-  margin-right: 12vw;
-  //padding-bottom: 50px;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f5f2f2;
 }
 
-.heading {
-  flex: 1 1 auto;
+.news-container {
+  width: 80%;
+  background-color: #fff;
+  text-align: center;
+  padding: 20px;
 }
 
-.description {
-  flex: 1 1 auto;
+.news-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
 }
 
-.content {
-  flex: 1 1 auto;
+.news-title {
+  font-weight: 700;
+  text-transform: capitalize;
+  margin-top: 20px;
+}
+
+.news-subtitle {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  color: #333;
+  font-weight: 100;
+  text-transform: none;
+}
+
+.news-article {
+  font-size: 18px;
+  margin-top: 20px;
+  line-height: 1.5;
+  font-weight: 500;
+  text-transform: none;
+}
+
+.article-meta-info {
+  border-top: 1px solid #ddd;
+  display: grid;
+  align-content: center;
+  float: left;
+  grid-gap: 50px;
+  grid-template-columns: auto auto;
+  margin: 25px 0 0;
+  padding: 15px 0 20px;
+  width: 100%;
 }
 </style>

@@ -1,9 +1,9 @@
 <template>
   <div class="text-center">
     <v-dialog v-model="isLoading" :scrim="false" persistent width="auto">
-      <v-card color="primary">
-        <v-card-text>
-          Loading ...
+      <v-card>
+        <v-card-text class="bg-red-lighten-1">
+          <v-label>Loading</v-label>
           <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
         </v-card-text>
       </v-card>
