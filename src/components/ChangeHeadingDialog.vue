@@ -46,7 +46,6 @@ import useChangeHeadingStore from '../stores/changeHeading.store.ts';
 import './ChangeHeadingDialog.vue';
 import { storeToRefs } from 'pinia';
 import { ref, watchEffect } from 'vue';
-import AppLabel from './AppLabel.vue';
 
 const changeHeadingStore = useChangeHeadingStore();
 const { isOpen, openedArticle } = storeToRefs(changeHeadingStore);

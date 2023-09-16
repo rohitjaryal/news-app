@@ -1,6 +1,5 @@
 import axios from 'axios';
 import useLoaderStore from '../stores/loader.store.ts';
-const loaderStore = useLoaderStore();
 
 // declare module 'vue' {
 //   interface ComponentCustomProperties {
@@ -38,8 +37,9 @@ export const fetchRequest = axios.create({
 
 fetchRequest.interceptors.request.use(
   (config) => {
+    const loaderStore = useLoaderStore();
+
     loaderStore.isLoading = true;
-    console.log(config);
     return config;
   },
   (error) => {
@@ -50,10 +50,12 @@ fetchRequest.interceptors.request.use(
 
 fetchRequest.interceptors.response.use(
   (response) => {
+    const loaderStore = useLoaderStore();
     loaderStore.isLoading = false;
     return response;
   },
   (error) => {
+    const loaderStore = useLoaderStore();
     loaderStore.isLoading = false;
     console.error(error);
     return Promise.reject(error.message);

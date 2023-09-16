@@ -28,7 +28,6 @@
 import { storeToRefs } from 'pinia';
 import useNewsStore from '../stores/news.store.ts';
 import useVisitedHeadlinesStore from '../stores/visitedHeadlines.store.ts';
-import './ChangeHeadingDialog.vue';
 
 const visitedHeadlinesStore = useVisitedHeadlinesStore();
 
