@@ -8,6 +8,12 @@ const routes = [
     name: 'list',
     path: '/list',
     component: List,
+    props: (route) => {
+      console.log('ssdss', route);
+      return {
+        query: route.query.q
+      };
+    },
     children: []
   },
   {

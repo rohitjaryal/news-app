@@ -2,17 +2,16 @@
   <v-form v-model="valid">
     <v-container>
       <v-row justify="space-evenly">
-        <v-col cols="16" md="3">
-          <v-autocomplete
+        <v-col md="3" align-self="center">
+          <v-combobox
             v-model="sources"
-            clearable
-            chips
-            label="Choose News sources"
+            label="Choose Sources"
             :items="allAvailableSources"
             item-title="name"
             item-value="id"
             multiple
-          ></v-autocomplete>
+            hide-selected
+          ></v-combobox>
         </v-col>
 
         <v-col md="3">
@@ -89,7 +88,7 @@
 <script setup>
 import { debounce } from 'lodash';
 import { getSources } from '@/apis/list.api.ts';
-import { onMounted, ref, watch } from 'vue';
+import { onBeforeMount, onMounted, ref, watch } from 'vue';
 import AppLoader from '@/components/Loader.vue';
 import useNewsStore from '@/stores/news.store.ts';
 import useChangeHeadingStore from '@/stores/changeHeading.store.ts';
@@ -97,8 +96,9 @@ import useNotificationStore from '@/stores/notification.store.ts';
 import ChangeHeadingDialog from '@/components/ChangeHeadingDialog.vue';
 import useVisitedHeadlinesStore from '../stores/visitedHeadlines.store.ts';
 import HistoryDialog from '@/components/HistoryDialog.vue';
+import storage from '@/includes/storage.ts';
 
-const sources = ref('');
+const sources = ref(null);
 const searchHeadlineText = ref('');
 const allAvailableSources = ref([]);
 const newsStore = useNewsStore();
@@ -107,21 +107,37 @@ const notificationStore = useNotificationStore();
 const visitedHeadlinesStore = useVisitedHeadlinesStore();
 
 const userInputDebounced = debounce(
-  (params) =>
+  (params) => {
     newsStore.getHeadlinesData({
       q: searchHeadlineText.value,
       sources: sources.value
-    }),
+    });
+
+    // save to client storage
+    saveSearchFilter();
+  },
   400,
   {
     leading: false
   }
 );
 
+function saveSearchFilter() {
+  storage.setSearchedHeadline(searchHeadlineText.value);
+  storage.setSources(sources.value);
+}
+
 watch([sources, searchHeadlineText], () => {
   if (sources.value || searchHeadlineText.value) {
     userInputDebounced();
   }
+});
+
+onBeforeMount(() => {
+  console.log('onBeforeMount:>>');
+  const storedFilters = storage.getFilter();
+  sources.value = storedFilters.sources;
+  searchHeadlineText.value = storedFilters.searchHeadline;
 });
 
 onMounted(async () => {

@@ -3,7 +3,7 @@
     <v-col cols="auto">
       <v-dialog transition="dialog-top-transition" v-model="isOpen">
         <v-card>
-          <v-toolbar title="Visited pages"></v-toolbar>
+          <v-toolbar title="Visited Headlines"></v-toolbar>
           <v-card-text>
             <v-list>
               <v-list-item v-for="headline in orderedVisitedHeadlines" :key="headline.title">
@@ -25,7 +25,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import useNewsStore from '../stores/news.store.ts';
 import useVisitedHeadlinesStore from '../stores/visitedHeadlines.store.ts';
@@ -37,12 +36,6 @@ const { isOpen } = storeToRefs(visitedHeadlinesStore);
 
 const newsStore = useNewsStore();
 const { orderedVisitedHeadlines } = storeToRefs(newsStore);
-
-const historyList = computed(() => {
-  return newsStore.visitedHeadlines.reverse();
-});
-
-console.log('historyList:>', historyList.value, orderedVisitedHeadlines.value);
 </script>
 
 <script lang="ts">

@@ -393,6 +393,26 @@ const sourcesDummy = {
         category: 'general',
         language: 'en',
         country: 'au'
+      },
+      {
+        id: 'abc-news-au1',
+        name: 'ABC News (AU)1',
+        description:
+          "Australia's most trusted source of local, national and world news. Comprehensive, independent, in-depth analysis, the latest business, sport, weather and more.",
+        url: 'http://www.abc.net.au/news',
+        category: 'general',
+        language: 'en',
+        country: 'au'
+      },
+      {
+        id: 'abc-news-au12',
+        name: 'ABC News (AU)12',
+        description:
+          "Australia's most trusted source of local, national and world news. Comprehensive, independent, in-depth analysis, the latest business, sport, weather and more.",
+        url: 'http://www.abc.net.au/news',
+        category: 'general',
+        language: 'en',
+        country: 'au'
       }
     ]
   }
