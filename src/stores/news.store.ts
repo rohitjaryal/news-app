@@ -3,13 +3,7 @@ import { getErrorApiCall, getTopHeadlines } from '../apis/list.api.ts';
 import useNotificationStore from './notification.store.ts';
 import helper from '../includes/helper.ts';
 import { ref } from 'vue';
-import { Article, HeadlineRequest } from '../types/list.types.ts';
-
-export interface NewsDataStoreInterface extends Article {
-  articleId: number;
-  timePublishedAgo: string;
-  newTitle?: string;
-}
+import { HeadlineRequest, NewsDataStoreInterface } from '../types/list.types.ts';
 
 export default defineStore('newsData', () => {
   const data = ref([] as NewsDataStoreInterface[]);

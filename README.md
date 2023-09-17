@@ -19,4 +19,7 @@ If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has a
 
 
 //    "build": "vue-tsc && vite build",
+
+
 //docker build -t vuejs-cookbook/dockerize-vuejs-app . -f DockerFile
+docker run -it -p 8080:8080 --rm --name dockerize-vuejs-app-1 vuejs-cookbook/dockerize-vuejs-app

@@ -1,9 +1,7 @@
-import { mount, shallowMount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import { createTestingPinia } from '@pinia/testing';
 import ChangeHeadingDialog from '../ChangeHeadingDialog.vue';
 import vuetify from '../../includes/Vuetify.ts';
-import { prettyFormat } from '@testing-library/vue';
-import { tr } from 'vuetify/locale';
 
 describe('Change Heading Dialog.vue', () => {
   // beforeEach(() => {
@@ -20,18 +18,10 @@ describe('Change Heading Dialog.vue', () => {
         mocks: {
           $t: (message: string) => message
           // isOpen: false,
-          // isDisabled: () => false
         }
       }
     });
 
-    console.log('>>>', wrapper.html({ pretty: true }));
-
-    // console.log('>>>>>', wrapper.findComponent({ name: 'v-toolbar-title' }));
-    //
-    // const targetElement = wrapper.findComponent({ name: 'v-toolbar-title-stub' });
-    // console.log('xxxx', targetElement.exists());
-
-    // expect(wrapper.text()).toContain('Change Heading');
+    expect(wrapper.text()).toContain('Change Heading');
   });
 });

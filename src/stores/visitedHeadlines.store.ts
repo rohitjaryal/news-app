@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
-import { NewsDataStoreInterface } from './news.store.ts';
 import useNewsStore from './news.store.ts';
+import { NewsDataStoreInterface } from '../types/list.types.ts';
 
 interface VisitedPagesStoreInterface extends NewsDataStoreInterface {
   visitedAt: Date;

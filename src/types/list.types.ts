@@ -30,9 +30,15 @@ export type HeadlineResponse = {
 export type HeadlineRequest = {
   q?: string;
   country?: string;
-  sources?: string[];
+  sources?: Source[];
 };
 
 export interface Sources extends Source {
   status: string;
+}
+
+export interface NewsDataStoreInterface extends Article {
+  articleId: number;
+  timePublishedAgo: string;
+  newTitle?: string;
 }

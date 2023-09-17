@@ -1,31 +1,8 @@
 import axios from 'axios';
 import useLoaderStore from '../stores/loader.store.ts';
 
-// declare module 'vue' {
-//   interface ComponentCustomProperties {
-//     $http: typeof axios;
-//     $translate: (key: string) => string;
-//   }
-// }
-
-// export default {
-//   install: (app: App, options: AxiosOptions) => {
-//     const axiosInstance = axios.create({
-//       baseURL: options.baseUrl
-//       // headers: {
-//       //   Authorization: options.token ? `Bearer ${options.token}` : ''
-//       // }
-//     });
-//
-//     axiosInstance.defaults.params = {};
-//     axiosInstance.defaults.params['apiKey'] = options.apiKey;
-//
-//     app.provide('axiosInstance', axiosInstance);
-//   }
-// };
-
-const BASE_URL = 'https://newsapi.org';
-const API_KEY = '099148be22804e849a0c6fe022b7cf5e';
+const BASE_URL = import.meta.env.VITE_NEWS_API_BASE_URL;
+const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
 
 export const fetchRequest = axios.create({
   baseURL: BASE_URL
@@ -59,4 +36,7 @@ fetchRequest.interceptors.response.use(
 );
 
 fetchRequest.defaults.params = {};
-fetchRequest.defaults.params['apiKey'] = API_KEY;
+fetchRequest.defaults.params = {
+  apiKey: API_KEY,
+  ...fetchRequest.defaults.params
+};
