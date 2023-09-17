@@ -31,10 +31,11 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import useNewsStore, { NewsDataStoreInterface } from '../stores/news.store.ts';
+import useNewsStore from '../stores/news.store.ts';
 import useVisitedNewsStore from '../stores/visitedHeadlines.store.ts';
 import { onMounted, ref } from 'vue';
 import { isNumber } from 'lodash';
+import { NewsDataStoreInterface } from '../types/list.types.ts';
 
 const router = useRouter();
 const newsStore = useNewsStore();

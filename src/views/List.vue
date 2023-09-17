@@ -91,14 +91,14 @@ import { debounce } from 'lodash';
 import { getSources } from '../apis/list.api.ts';
 import { onBeforeMount, onMounted, ref, watch } from 'vue';
 import AppLoader from '../components/Loader.vue';
-import useNewsStore, { NewsDataStoreInterface } from '../stores/news.store.ts';
+import useNewsStore from '../stores/news.store.ts';
 import useChangeHeadingStore from '../stores/changeHeading.store.ts';
 import useNotificationStore from '../stores/notification.store.ts';
 import ChangeHeadingDialog from '../components/ChangeHeadingDialog.vue';
 import useVisitedHeadlinesStore from '../stores/visitedHeadlines.store.ts';
 import HistoryDialog from '../components/HistoryDialog.vue';
 import storage from '../includes/storage.ts';
-import { Source } from '../types/list.types.ts';
+import { NewsDataStoreInterface, Source } from '../types/list.types.ts';
 
 const sources = ref();
 const searchHeadlineText = ref('');

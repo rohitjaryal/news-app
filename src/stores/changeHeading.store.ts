@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { NewsDataStoreInterface } from './news.store.ts';
+import { NewsDataStoreInterface } from '../types/list.types.ts';
 
 export default defineStore('changeHeadingDialog', {
   state: () => ({
