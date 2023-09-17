@@ -1,30 +1,26 @@
 import { defineStore } from 'pinia';
 import { getErrorApiCall, getTopHeadlines } from '../apis/list.api.ts';
-import useNotificationStore from '@/stores/notification.store.ts';
+import useNotificationStore from './notification.store.ts';
+import helper from '../includes/helper.ts';
+import { ref } from 'vue';
+import { Article, HeadlineRequest } from '../types/list.types.ts';
 
-import helper from '@/includes/helper';
-import { computed, ref } from 'vue';
+export interface NewsDataStoreInterface extends Article {
+  articleId: number;
+  timePublishedAgo: string;
+  newTitle?: string;
+}
+
 export default defineStore('newsData', () => {
-  const data = ref([]);
-  const visitedHeadlines = ref([]);
+  const data = ref([] as NewsDataStoreInterface[]);
 
-  async function getHeadlinesData(payload) {
+  async function getHeadlinesData(payload: HeadlineRequest) {
     const response = await getTopHeadlines(payload);
     data.value = response?.data?.articles.map((info, index) => ({
       ...info,
       articleId: index,
       timePublishedAgo: helper.convertTimeStampToTimeAgo(info.publishedAt)
     }));
-  }
-
-  function markArticleAsVisited(articleId) {
-    const visitedHeadline = visitedHeadlines.value.find(
-      (headline) => headline.title === data.value[articleId].title
-    );
-
-    if (!visitedHeadline) {
-      visitedHeadlines.value.push({ ...data.value[articleId], visitedAt: new Date() });
-    }
   }
 
   async function errorApiCall() {
@@ -36,23 +32,14 @@ export default defineStore('newsData', () => {
       notificationStore.showAlert({
         isOpen: true,
         text: 'Something went wrong!',
-        type: 'error'
+        type: 'warning'
       });
     }
   }
 
-  const orderedVisitedHeadlines = computed(() => {
-    return visitedHeadlines.value.sort(
-      (a, b) => new Date(b.visitedAt).getTime() - new Date(a.visitedAt).getTime()
-    );
-  });
-
   return {
     data,
-    visitedHeadlines,
     errorApiCall,
-    markArticleAsVisited,
-    orderedVisitedHeadlines,
     getHeadlinesData
   };
 });

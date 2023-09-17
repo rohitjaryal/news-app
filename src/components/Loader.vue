@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import useLoaderStore from '@/stores/loader.store.ts';
+import useLoaderStore from '../stores/loader.store.ts';
 import { storeToRefs } from 'pinia';
 const loaderStore = useLoaderStore();
 const { isLoading } = storeToRefs(loaderStore);

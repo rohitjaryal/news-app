@@ -2,7 +2,7 @@ const storagePrefix = 'news_app_v1_';
 const sources = `${storagePrefix}_sources`;
 const searchHeadline = `${storagePrefix}_searchHeadline`;
 
-const storageStrategy = window.localStorage;
+const storageStrategy = window.sessionStorage;
 
 const storage = {
   getFilter: () => {
@@ -11,12 +11,12 @@ const storage = {
       searchHeadline: JSON.parse(storageStrategy.getItem(searchHeadline) as string) || null
     };
   },
-  setSources: (value: []) => {
-    if (value.length) {
+  setSources: (value: [] | null) => {
+    if (value?.length) {
       storageStrategy.setItem(sources, JSON.stringify(value));
     }
   },
-  setSearchedHeadline: (value: '') => {
+  setSearchedHeadline: (value: string) => {
     if (value) {
       storageStrategy.setItem(searchHeadline, JSON.stringify(value));
     }

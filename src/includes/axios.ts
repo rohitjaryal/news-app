@@ -24,15 +24,11 @@ import useLoaderStore from '../stores/loader.store.ts';
 //   }
 // };
 
-const BASE_URL = 'https://localhost:5143';
-// const BASE_URL = 'https://newsapi.org';
+const BASE_URL = 'https://newsapi.org';
 const API_KEY = '099148be22804e849a0c6fe022b7cf5e';
 
 export const fetchRequest = axios.create({
   baseURL: BASE_URL
-  // headers: {
-  //   Authorization: options.token ? `Bearer ${options.token}` : ''
-  // }
 });
 
 fetchRequest.interceptors.request.use(

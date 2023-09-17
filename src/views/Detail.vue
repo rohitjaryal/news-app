@@ -1,7 +1,7 @@
 <template>
   <body>
     <div class="news-container">
-      <h1 class="news-title">{{ currentArticle.title }}</h1>
+      <h1 class="news-title">{{ currentArticle.newTitle || currentArticle.title }}</h1>
       <img :src="currentArticle.urlToImage" :alt="currentArticle.title" class="news-image" />
       <h2 class="news-subtitle">{{ currentArticle.description }}</h2>
 
@@ -28,19 +28,25 @@
     </div>
   </body>
 </template>
+
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import useNewsStore from '../stores/news.store.ts';
+import useNewsStore, { NewsDataStoreInterface } from '../stores/news.store.ts';
+import useVisitedNewsStore from '../stores/visitedHeadlines.store.ts';
 import { onMounted, ref } from 'vue';
-
-const newsStore = useNewsStore();
+import { isNumber } from 'lodash';
 
 const router = useRouter();
-const articleId = router.currentRoute.value.params?.id;
-const currentArticle = ref(newsStore.data?.[articleId] || {});
+const newsStore = useNewsStore();
+const visitedNewsStore = useVisitedNewsStore();
+const articleId = Number(router.currentRoute.value.params?.id);
+
+const currentArticle = ref(newsStore.data?.[articleId] as NewsDataStoreInterface);
 
 onMounted(() => {
-  newsStore.markArticleAsVisited(articleId);
+  if (isNumber(articleId)) {
+    visitedNewsStore.markArticleAsVisited(articleId);
+  }
 });
 </script>
 
@@ -92,13 +98,13 @@ body {
 
 .article-meta-info {
   border-top: 1px solid #ddd;
-  display: grid;
+  display: flex;
+  justify-content: space-evenly;
   align-content: center;
-  float: left;
   grid-gap: 50px;
-  grid-template-columns: auto auto;
   margin: 25px 0 0;
   padding: 15px 0 20px;
+  flex-wrap: wrap;
   width: 100%;
 
   .published-at {

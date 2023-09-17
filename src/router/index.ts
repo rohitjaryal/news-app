@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, Router, RouteRecordRaw } from 'vue-router';
 
-const List = () => import('@/views/List.vue');
-const Detail = () => import('@/views/Detail.vue');
+const List = () => import('../views/List.vue');
+const Detail = () => import('../views/Detail.vue');
 
 const routes = [
   {
@@ -9,7 +9,6 @@ const routes = [
     path: '/list',
     component: List,
     props: (route) => {
-      console.log('ssdss', route);
       return {
         query: route.query.q
       };

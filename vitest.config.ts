@@ -12,7 +12,11 @@ export default mergeConfig(
       root: fileURLToPath(new URL('./', import.meta.url)),
       transformMode: {
         web: [/\.[jt]sx$/]
-      }
+      },
+      deps: {
+        inline: ['vuetify']
+      },
+      setupFiles: 'vuetify.config.ts'
     }
   })
 );

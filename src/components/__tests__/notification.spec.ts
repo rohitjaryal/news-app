@@ -6,7 +6,7 @@ describe('Notification.vue', () => {
   test('renders inner text', () => {
     const wrapper = shallowMount(Notification, {
       global: {
-        // plugins: [createTestingPinia()]
+        plugins: [createTestingPinia()]
       }
     });
 

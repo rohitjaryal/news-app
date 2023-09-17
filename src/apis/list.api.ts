@@ -1,46 +1,7 @@
 import { fetchRequest } from '../includes/axios.ts';
 import { once } from 'lodash';
-type Source = {
-  id: null | string;
-  name: string;
-  description: string;
-  url: string;
-  category: string;
-  language: string;
-  country: string;
-};
+import { HeadlineRequest, HeadlineResponse, Source } from '../types/list.types.ts';
 
-type Article = {
-  source: Pick<Source, 'id' | 'name'>;
-  author: string;
-  title: string;
-  description: string;
-  url: string;
-  urlToImage: string;
-  publishedAt: string;
-  content: string;
-};
-
-interface HeadlineResponse {
-  status: string;
-  totalResults: number;
-  articles: Article[];
-}
-
-type HeadlineRequest = {
-  q?: string;
-  country?: string;
-  sources?: string[];
-};
-
-type Sources = {
-  status: string;
-  sources: Sources;
-};
-
-interface SourceResponse extends Sources {
-  status: string;
-}
 const dummyData = {
   data: {
     status: 'ok',
@@ -385,7 +346,7 @@ const sourcesDummy = {
         country: 'us'
       },
       {
-        id: 'abc-news-au',
+        id: 'abc-news-aue',
         name: 'ABC News (AU)',
         description:
           "Australia's most trusted source of local, national and world news. Comprehensive, independent, in-depth analysis, the latest business, sport, weather and more.",
@@ -395,7 +356,7 @@ const sourcesDummy = {
         country: 'au'
       },
       {
-        id: 'abc-news-au1',
+        id: 'abc-news-au1q',
         name: 'ABC News (AU)1',
         description:
           "Australia's most trusted source of local, national and world news. Comprehensive, independent, in-depth analysis, the latest business, sport, weather and more.",
@@ -405,7 +366,27 @@ const sourcesDummy = {
         country: 'au'
       },
       {
-        id: 'abc-news-au12',
+        id: 'abc-news-au12s',
+        name: 'ABC News (AU)12',
+        description:
+          "Australia's most trusted source of local, national and world news. Comprehensive, independent, in-depth analysis, the latest business, sport, weather and more.",
+        url: 'http://www.abc.net.au/news',
+        category: 'general',
+        language: 'en',
+        country: 'au'
+      },
+      {
+        id: 'abc-news-au1222x',
+        name: 'ABC News (AU)12',
+        description:
+          "Australia's most trusted source of local, national and world news. Comprehensive, independent, in-depth analysis, the latest business, sport, weather and more.",
+        url: 'http://www.abc.net.au/news',
+        category: 'general',
+        language: 'en',
+        country: 'au'
+      },
+      {
+        id: 'abc-news-au122221',
         name: 'ABC News (AU)12',
         description:
           "Australia's most trusted source of local, national and world news. Comprehensive, independent, in-depth analysis, the latest business, sport, weather and more.",
@@ -418,6 +399,13 @@ const sourcesDummy = {
   }
 };
 
+export interface SourceResponse {
+  data: {
+    status: string;
+    sources: Source[];
+  };
+}
+
 export const getTopHeadlines = async (data: HeadlineRequest): Promise<HeadlineResponse> => {
   const { country = 'us', q, sources } = data;
   const query = new URLSearchParams();
@@ -426,17 +414,21 @@ export const getTopHeadlines = async (data: HeadlineRequest): Promise<HeadlineRe
     query.set('q', q);
   }
 
-  sources ? query.set('sources', sources.toString()) : query.set('country', country);
+  const sourcesIds = sources?.map(({ id }) => id);
+
+  if (sourcesIds) {
+    sources ? query.set('sources', sourcesIds.toString()) : query.set('country', country);
+  }
   // return fetchRequest.get(`v2/top-headlines?${query.toString()}`);
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     resolve(dummyData);
   });
 };
 
 export const getSources = once(async (): Promise<SourceResponse> => {
   // return fetchRequest.get('v2/sources');
-  return new Promise((resolve, reject) => resolve(sourcesDummy));
+  return new Promise((resolve) => resolve(sourcesDummy));
 });
 
 export const getErrorApiCall = async (): Promise<HeadlineResponse> => {

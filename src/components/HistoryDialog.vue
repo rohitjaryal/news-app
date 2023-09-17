@@ -1,44 +1,59 @@
 <template>
-  <v-row>
-    <v-col cols="auto">
-      <v-dialog transition="dialog-top-transition" v-model="isOpen">
+  <v-row justify="center">
+    <v-col cols="12" md="8" lg="6">
+      <v-dialog transition="dialog-top-transition" v-model="isOpen" max-width="800px">
         <v-card>
-          <v-toolbar title="Visited Headlines"></v-toolbar>
+          <v-toolbar dense elevation="8">
+            <v-toolbar-title class="white--text">Visited Headlines</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn icon @click.prevent="isOpen = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-toolbar>
           <v-card-text>
             <v-list>
-              <v-list-item v-for="headline in orderedVisitedHeadlines" :key="headline.title">
-                <template v-slot:prepend>
-                  <v-list-item-subtitle v-text="headline?.source?.name"></v-list-item-subtitle>
-                  <v-list-item-title class="pa-3" v-text="headline.title"></v-list-item-title>
-                  <v-icon color="green-darken-2" icon="mdi-domain"></v-icon>
-                </template>
+              <v-list-item
+                v-for="(headline, index) in orderedVisitedHeadlines"
+                :key="headline.title"
+                :class="index % 2 === 0 ? 'even-list-item' : 'odd-list-item'"
+                dense
+                ripple
+              >
+                <v-list-item>
+                  <v-list-item-subtitle class="grey--text">{{
+                    headline?.source?.name
+                  }}</v-list-item-subtitle>
+                  <v-list-item-title
+                    v-text="headline.newTitle || headline.title"
+                  ></v-list-item-title>
+                </v-list-item>
               </v-list-item>
             </v-list>
           </v-card-text>
-          <v-card-actions class="justify-end">
-            <v-btn variant="text" @click.prevent="isOpen = false">Close</v-btn>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue-darken-1" variant="text" @click="isOpen = false"> Close </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
     </v-col>
   </v-row>
 </template>
-
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
-import useNewsStore from '../stores/news.store.ts';
 import useVisitedHeadlinesStore from '../stores/visitedHeadlines.store.ts';
 
 const visitedHeadlinesStore = useVisitedHeadlinesStore();
 
-const { isOpen } = storeToRefs(visitedHeadlinesStore);
-
-const newsStore = useNewsStore();
-const { orderedVisitedHeadlines } = storeToRefs(newsStore);
+const { isOpen, orderedVisitedHeadlines } = storeToRefs(visitedHeadlinesStore);
 </script>
 
-<script lang="ts">
-export default {
-  name: 'HistoryDialog'
-};
-</script>
+<style scoped lang="scss">
+.even-list-item {
+  background-color: #f5f5f5; /* Light gray background color for even items */
+}
+
+.odd-list-item {
+  background-color: #ffffff; /* White background color for odd items */
+}
+</style>

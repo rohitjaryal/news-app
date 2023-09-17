@@ -1,44 +1,45 @@
 <template>
-  <v-form v-model="valid">
-    <v-container>
-      <v-row justify="space-evenly">
-        <v-col md="3" align-self="center">
-          <v-combobox
-            v-model="sources"
-            label="Choose Sources"
-            :items="allAvailableSources"
-            item-title="name"
-            item-value="id"
-            multiple
-            hide-selected
-          ></v-combobox>
-        </v-col>
+  <v-container>
+    <v-row justify="space-evenly">
+      <v-col cols="12" sm="6" md="3" align-self="center">
+        <v-combobox
+          v-model="sources"
+          label="Choose Sources"
+          :items="allAvailableSources"
+          item-title="name"
+          item-value="id"
+          multiple
+          chips
+          closable-chips
+          hide-selected
+          class="combobox"
+        ></v-combobox>
+      </v-col>
 
-        <v-col md="3">
-          <v-text-field
-            v-model="searchHeadlineText"
-            :counter="255"
-            label="Search Headline"
-          ></v-text-field>
-        </v-col>
-        <v-col md="3" align-self="center">
-          <v-btn
-            width="100%"
-            class="text-capitalize"
-            variant="elevated"
-            :disabled="!newsStore.visitedHeadlines.length"
-            @click.prevent="visitedHeadlinesStore.isOpen = true"
-            >Visited headlines
-          </v-btn>
-        </v-col>
-        <v-col md="3" align-self="center">
-          <v-btn width="100%" @click.prevent="newsStore.errorApiCall()" class="text-capitalize">
-            Error API Call
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-form>
+      <v-col cols="12" sm="6" md="3">
+        <v-text-field
+          v-model="searchHeadlineText"
+          :counter="255"
+          label="Search Headline"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="12" sm="6" md="3" align-self="center">
+        <v-btn
+          width="100%"
+          class="text-capitalize"
+          variant="elevated"
+          :disabled="!visitedHeadlinesStore.visitedHeadlines.length"
+          @click.prevent="visitedHeadlinesStore.isOpen = true"
+          >Visited headlines
+        </v-btn>
+      </v-col>
+      <v-col cols="12" sm="6" md="3" align-self="center">
+        <v-btn width="100%" @click.prevent="newsStore.errorApiCall()" class="text-capitalize">
+          Error API Call
+        </v-btn>
+      </v-col>
+    </v-row>
+  </v-container>
   <v-container v-show="!newsStore.data.length">
     <h3>Sorry, no news are available.</h3>
   </v-container>
@@ -85,36 +86,35 @@
   <teleport to="body"> <history-dialog /></teleport>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { debounce } from 'lodash';
-import { getSources } from '@/apis/list.api.ts';
+import { getSources } from '../apis/list.api.ts';
 import { onBeforeMount, onMounted, ref, watch } from 'vue';
-import AppLoader from '@/components/Loader.vue';
-import useNewsStore from '@/stores/news.store.ts';
-import useChangeHeadingStore from '@/stores/changeHeading.store.ts';
-import useNotificationStore from '@/stores/notification.store.ts';
-import ChangeHeadingDialog from '@/components/ChangeHeadingDialog.vue';
+import AppLoader from '../components/Loader.vue';
+import useNewsStore, { NewsDataStoreInterface } from '../stores/news.store.ts';
+import useChangeHeadingStore from '../stores/changeHeading.store.ts';
+import useNotificationStore from '../stores/notification.store.ts';
+import ChangeHeadingDialog from '../components/ChangeHeadingDialog.vue';
 import useVisitedHeadlinesStore from '../stores/visitedHeadlines.store.ts';
-import HistoryDialog from '@/components/HistoryDialog.vue';
-import storage from '@/includes/storage.ts';
+import HistoryDialog from '../components/HistoryDialog.vue';
+import storage from '../includes/storage.ts';
+import { Source } from '../types/list.types.ts';
 
-const sources = ref(null);
+const sources = ref();
 const searchHeadlineText = ref('');
-const allAvailableSources = ref([]);
+const allAvailableSources = ref([] as Source[]);
 const newsStore = useNewsStore();
 const changeHeadingStore = useChangeHeadingStore();
 const notificationStore = useNotificationStore();
 const visitedHeadlinesStore = useVisitedHeadlinesStore();
 
 const userInputDebounced = debounce(
-  (params) => {
+  () => {
     newsStore.getHeadlinesData({
       q: searchHeadlineText.value,
       sources: sources.value
     });
-
-    // save to client storage
-    saveSearchFilter();
+    updateStoredSearchFilter();
   },
   400,
   {
@@ -122,19 +122,17 @@ const userInputDebounced = debounce(
   }
 );
 
-function saveSearchFilter() {
+function updateStoredSearchFilter() {
+  storage.clearFilter();
   storage.setSearchedHeadline(searchHeadlineText.value);
   storage.setSources(sources.value);
 }
 
 watch([sources, searchHeadlineText], () => {
-  if (sources.value || searchHeadlineText.value) {
-    userInputDebounced();
-  }
+  userInputDebounced();
 });
 
 onBeforeMount(() => {
-  console.log('onBeforeMount:>>');
   const storedFilters = storage.getFilter();
   sources.value = storedFilters.sources;
   searchHeadlineText.value = storedFilters.searchHeadline;
@@ -142,20 +140,17 @@ onBeforeMount(() => {
 
 onMounted(async () => {
   const response = await getSources();
-  allAvailableSources.value = response.data.sources?.map(({ id, name }) => ({
-    id,
-    name
-  }));
+  allAvailableSources.value = response.data.sources?.filter((info) => info.id);
 
   newsStore.getHeadlinesData({});
 });
 
-function handleChangeHeadingDialog(article) {
+function handleChangeHeadingDialog(article: NewsDataStoreInterface) {
   changeHeadingStore.isOpen = true;
   changeHeadingStore.openedArticle = article;
 }
 
-function saveNewHeading(newHeading, articleId) {
+function saveNewHeading(newHeading: string, articleId: number) {
   newsStore.data[articleId] = {
     ...newsStore.data[articleId],
     newTitle: newHeading
@@ -182,5 +177,9 @@ function saveNewHeading(newHeading, articleId) {
   justify-content: space-around;
   width: 100%;
   align-content: space-around;
+}
+.combobox {
+  overflow: hidden;
+  height: 80px; /* Adjust the height as needed */
 }
 </style>

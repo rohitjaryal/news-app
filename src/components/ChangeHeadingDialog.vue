@@ -1,13 +1,8 @@
 <template>
   <v-row justify="space-around">
     <v-dialog v-model="isOpen" class="w-33">
-      <!--      <template v-slot:activator="{ props }">-->
-      <!--        <v-btn color="primary" v-bind="props">Change Heading</v-btn>-->
-      <!--      </template>-->
       <v-card>
-        <app-label>
-          <v-card-title> Change Heading </v-card-title>
-        </app-label>
+        <v-toolbar title="Change Headline" elevation="8"></v-toolbar>
 
         <v-card-text>
           <v-container>
@@ -29,7 +24,7 @@
           <v-btn
             color="blue-darken-1"
             variant="text"
-            @click="handleHeadingChange(openedArticle)"
+            @click="handleHeadingChange(openedArticle.articleId)"
             :disabled="!isFormValid"
           >
             Save
@@ -45,7 +40,7 @@
 import useChangeHeadingStore from '../stores/changeHeading.store.ts';
 import './ChangeHeadingDialog.vue';
 import { storeToRefs } from 'pinia';
-import { ref, watchEffect } from 'vue';
+import { ref, watch } from 'vue';
 
 const changeHeadingStore = useChangeHeadingStore();
 const { isOpen, openedArticle } = storeToRefs(changeHeadingStore);
@@ -66,16 +61,16 @@ const headingRule = [
   }
 ];
 
-watchEffect(() => {
+watch(isOpen, () => {
   if (isOpen.value) {
     newHeading.value = '';
   }
-}, [isOpen.value]);
+});
 
 const emit = defineEmits(['headingChange']);
 
-function handleHeadingChange(article) {
-  emit('headingChange', newHeading.value, article.articleId);
+function handleHeadingChange(articleId: number) {
+  emit('headingChange', newHeading.value, articleId);
 }
 </script>
 
