@@ -26,26 +26,33 @@
       <v-col cols="12" sm="6" md="3" align-self="center">
         <v-btn
           width="100%"
-          class="text-capitalize"
+          class="text-capitalize align-center"
           variant="elevated"
           :disabled="!visitedHeadlinesStore.visitedHeadlines.length"
           @click.prevent="visitedHeadlinesStore.isOpen = true"
-          >Visited headlines
+        >
+          <v-icon icon="fa-solid fa-bookmark" class="mr-2 text-green-accent-4" />Visited headlines
         </v-btn>
       </v-col>
       <v-col cols="12" sm="6" md="3" align-self="center">
-        <v-btn width="100%" @click.prevent="newsStore.errorApiCall()" class="text-capitalize">
+        <v-btn
+          width="100%"
+          @click.prevent="newsStore.errorApiCall()"
+          class="text-capitalize align-center"
+        >
+          <v-icon icon="fa-solid fa-xmark" class="mr-2 text-red-darken-1" />
           Error API Call
         </v-btn>
       </v-col>
     </v-row>
   </v-container>
-  <v-container v-show="!newsStore.data.length">
-    <h3>Sorry, no news are available.</h3>
+  <v-container v-if="!newsData.length" class="d-flex align-center">
+    <v-icon icon="fa-solid  fa-circle-exclamation" />
+    <h3 class="ml-2">Sorry, no news are available.</h3>
   </v-container>
-  <v-container>
+  <v-container v-else>
     <v-row>
-      <v-col v-for="data in newsStore.data" :key="data.articleId" cols="12" sm="4">
+      <v-col v-for="data in newsData" :key="data.articleId" cols="12" sm="4">
         <v-card
           rounded
           :title="data.newTitle || data.title || ' '"
@@ -74,8 +81,9 @@
               color="#f99d1c"
               @click.prevent="handleChangeHeadingDialog(data)"
               class="text-capitalize font-weight-black"
-              >Change Heading</v-btn
             >
+              <v-icon icon="fa-solid fa-gear " /> Change Headline
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -99,6 +107,7 @@ import useVisitedHeadlinesStore from '../stores/visitedHeadlines.store.ts';
 import HistoryDialog from '../components/HistoryDialog.vue';
 import storage from '../includes/storage.ts';
 import { NewsDataStoreInterface, Source } from '../types/list.types.ts';
+import { storeToRefs } from 'pinia';
 
 const sources = ref();
 const searchHeadlineText = ref('');
@@ -107,6 +116,10 @@ const newsStore = useNewsStore();
 const changeHeadingStore = useChangeHeadingStore();
 const notificationStore = useNotificationStore();
 const visitedHeadlinesStore = useVisitedHeadlinesStore();
+
+const { data: newsData } = storeToRefs(newsStore);
+
+console.log('xxx:>', newsStore.data.value, newsData.value, newsData.value.length);
 
 const userInputDebounced = debounce(
   () => {

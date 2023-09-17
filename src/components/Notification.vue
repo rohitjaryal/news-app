@@ -8,9 +8,7 @@
       :text="text"
       :variant="variant"
       close-icon="fa-solid fa-xmark fg-amber-accent-4"
-    >
-      <i class="fas fa-phone"></i>
-    </v-alert>
+    />
   </transition>
 </template>
 

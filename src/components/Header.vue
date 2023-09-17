@@ -1,9 +1,13 @@
 <template>
   <v-app-bar :elevation="6" class="fg-amber-accent-4" density="compact" rounded>
-    <v-btn class="news-header" @click.prevent="router.push({ name: 'list' })">News</v-btn>
+    <v-btn class="news-header" @click.prevent="router.push({ name: 'list' })">
+      <v-icon icon="fa-regular fa-newspaper" class="ml-2" />
+      News
+    </v-btn>
 
     <template v-slot:append>
       <v-btn v-show="router.currentRoute.value.name === 'detail'" @click.prevent="router.back()">
+        <v-icon icon="fa-solid fa-circle-arrow-left" class="mr-2" />
         Back
       </v-btn>
     </template>

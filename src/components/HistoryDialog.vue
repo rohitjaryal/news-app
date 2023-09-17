@@ -1,44 +1,31 @@
 <template>
-  <v-row justify="center">
-    <v-col cols="12" md="8" lg="6">
-      <v-dialog transition="dialog-top-transition" v-model="isOpen" max-width="800px">
+  <v-row>
+    <v-col cols="auto">
+      <v-dialog transition="dialog-top-transition" v-model="isOpen">
         <v-card>
-          <v-toolbar dense elevation="8">
-            <v-toolbar-title class="white--text">Visited Headlines</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn icon @click.prevent="isOpen = false">
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-          </v-toolbar>
+          <v-toolbar title="Visited Headlines"></v-toolbar>
           <v-card-text>
             <v-list>
-              <v-list-item
-                v-for="(headline, index) in orderedVisitedHeadlines"
-                :key="headline.title"
-                :class="index % 2 === 0 ? 'even-list-item' : 'odd-list-item'"
-                dense
-                ripple
-              >
-                <v-list-item>
-                  <v-list-item-subtitle class="grey--text">{{
-                    headline?.source?.name
-                  }}</v-list-item-subtitle>
-                  <v-list-item-title
-                    v-text="headline.newTitle || headline.title"
-                  ></v-list-item-title>
-                </v-list-item>
+              <v-list-item v-for="headline in orderedVisitedHeadlines" :key="headline.title">
+                <template v-slot:prepend>
+                  <v-btn :href="headline.url" target="_blank">
+                    <v-icon icon="fa-solid fa-arrow-up-right-from-square" />
+                    {{ headline?.source?.name }}
+                  </v-btn>
+                  <v-list-item-title class="pa-3" v-text="headline.title"></v-list-item-title>
+                </template>
               </v-list-item>
             </v-list>
           </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue-darken-1" variant="text" @click="isOpen = false"> Close </v-btn>
+          <v-card-actions class="justify-end">
+            <v-btn variant="text" @click.prevent="isOpen = false">Close</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
     </v-col>
   </v-row>
 </template>
+
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import useVisitedHeadlinesStore from '../stores/visitedHeadlines.store.ts';

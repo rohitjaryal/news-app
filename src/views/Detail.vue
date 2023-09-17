@@ -14,9 +14,12 @@
             {{ currentArticle.timePublishedAgo }}
           </v-chip></span
         >
-        <span class="news-source"
-          >Visit source article
-          <a :href="currentArticle.url" target="_blank">{{ currentArticle.source?.name }} </a>
+        <span class="news-source align-center">
+          Visit source article
+          <a :href="currentArticle.url" target="_blank" class="ml-2">
+            <v-icon icon="fa-solid fa-arrow-up-right-from-square" class="mr-2" />
+            {{ currentArticle.source?.name }}
+          </a>
         </span>
       </div>
 
