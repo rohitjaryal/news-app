@@ -1,27 +1,18 @@
 import { shallowMount } from '@vue/test-utils';
 import { createTestingPinia } from '@pinia/testing';
+import { createVuetify } from 'vuetify';
 import ChangeHeadingDialog from '../ChangeHeadingDialog.vue';
-import vuetify from '../../includes/Vuetify.ts';
 
 describe('Change Heading Dialog.vue', () => {
-  // beforeEach(() => {
-  //   // creates a fresh pinia and make it active so it's automatically picked
-  //   // up by any useStore() call without having to pass it to it:
-  //   // `useStore(pinia)`
-  //   setActivePinia(createPinia());
-  // });
-
-  test('renders inner text', () => {
-    const wrapper = shallowMount(ChangeHeadingDialog, {
+  const vuetify = createVuetify();
+  test('displays Title', async () => {
+    const wrapper = await shallowMount(ChangeHeadingDialog, {
       global: {
-        plugins: [createTestingPinia(), vuetify],
-        mocks: {
-          $t: (message: string) => message
-          // isOpen: false,
-        }
+        plugins: [vuetify, createTestingPinia()]
       }
     });
 
-    expect(wrapper.text()).toContain('Change Heading');
+    let toolbar = wrapper.find('v-toolbar');
+    expect(toolbar.attributes().title).toContain('Change Headline');
   });
 });

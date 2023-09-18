@@ -1,31 +1,30 @@
 <template>
   <body>
     <div class="news-container">
-      <h1 class="news-title">{{ currentArticle.newTitle || currentArticle.title }}</h1>
-      <img :src="currentArticle.urlToImage" :alt="currentArticle.title" class="news-image" />
-      <h2 class="news-subtitle">{{ currentArticle.description }}</h2>
+      <h1 class="news-title">{{ currentArticle?.newTitle || currentArticle?.title }}</h1>
+      <img :src="currentArticle?.urlToImage" :alt="currentArticle?.title" class="news-image" />
+      <h2 class="news-subtitle">{{ currentArticle?.description }}</h2>
 
       <div class="article-meta-info">
         <span class="published-at"
-          >By {{ currentArticle.author }} &nbsp;&nbsp;
-
-          <v-chip variant="outlined">
+          >By {{ currentArticle?.author }}
+          <v-chip variant="outlined" class="ml-2">
             Published
-            {{ currentArticle.timePublishedAgo }}
+            {{ currentArticle?.timePublishedAgo }}
           </v-chip></span
         >
         <span class="news-source align-center">
           Visit source article
-          <a :href="currentArticle.url" target="_blank" class="ml-2">
+          <a :href="currentArticle?.url" target="_blank" class="ml-2">
             <v-icon icon="fa-solid fa-arrow-up-right-from-square" class="mr-2" />
-            {{ currentArticle.source?.name }}
+            {{ currentArticle?.source?.name }}
           </a>
         </span>
       </div>
 
       <div class="news-article">
         <p>
-          {{ currentArticle.content }}
+          {{ currentArticle?.content }}
         </p>
       </div>
     </div>

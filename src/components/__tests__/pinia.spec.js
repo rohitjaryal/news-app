@@ -1,25 +1,16 @@
 import { createPinia, setActivePinia } from 'pinia';
 import useNewsStore from '@/stores/news.store.ts';
-vi.mock('@/includes/helper', () => {
-  return { convertTimeStampToTimeAgo: '' };
-});
 
-//vi.mock('@/includes/firebase', () => {
-//   return { auth: { signInWithEmailAndPassword: () => Promise.resolve() } }
-// })
-
-// const mock = vi.fn().mockImplementation(() => {});
-
-//vi.mock('@/includes/firebase', () => {
-//   return { auth: { signInWithEmailAndPassword: () => Promise.resolve() } }
-// })
-describe('Counter Store', () => {
+describe('verify Pinia news Store', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
   });
 
-  it('increments', () => {
+  it('add article', () => {
     const newsStore = useNewsStore();
     expect(newsStore.data).toStrictEqual([]);
+
+    newsStore.data.value = [{ articleId: 1 }];
+    expect(newsStore.data.value.length).toStrictEqual(1);
   });
 });

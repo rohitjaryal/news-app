@@ -56,7 +56,7 @@
         <v-card
           rounded
           :title="data.newTitle || data.title || ' '"
-          :subtitle="data.source.name || ' '"
+          :subtitle="data.source?.name || ' '"
           :text="data.description || ' '"
           variant="tonal"
           height="100%"
@@ -118,8 +118,6 @@ const notificationStore = useNotificationStore();
 const visitedHeadlinesStore = useVisitedHeadlinesStore();
 
 const { data: newsData } = storeToRefs(newsStore);
-
-console.log('xxx:>', newsStore.data.value, newsData.value, newsData.value.length);
 
 const userInputDebounced = debounce(
   () => {

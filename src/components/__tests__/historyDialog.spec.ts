@@ -1,27 +1,18 @@
 import { shallowMount } from '@vue/test-utils';
 import { createTestingPinia } from '@pinia/testing';
 import HistoryDialog from '../HistoryDialog.vue';
-import { createPinia, setActivePinia } from 'pinia';
-
-vi.mock('@/includes/helper', () => {
-  return { convertTimeStampToTimeAgo: '' };
-});
+import { createVuetify } from 'vuetify';
 
 describe('HistoryDialog.vue', () => {
-  beforeEach(() => {
-    // creates a fresh pinia and make it active so it's automatically picked
-    // up by any useStore() call without having to pass it to it:
-    // `useStore(pinia)`
-    setActivePinia(createPinia());
-  });
-
-  test('renders inner text', () => {
-    const wrapper = shallowMount(HistoryDialog, {
+  const vuetify = createVuetify();
+  test('displays message', async () => {
+    const wrapper = await shallowMount(HistoryDialog, {
       global: {
-        plugins: [createTestingPinia()]
+        plugins: [vuetify, createTestingPinia()]
       }
     });
 
-    expect(wrapper.findComponent({ id: 'visited-headlines-title' })).toContain('Visited Headlines');
+    let button = wrapper.find('v-toolbar');
+    expect(button.attributes().title).toContain('Visited Headlines');
   });
 });
