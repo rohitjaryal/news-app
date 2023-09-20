@@ -95,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import { getSources } from '../apis/list.api.ts';
 import { onBeforeMount, onMounted, ref, watch } from 'vue';
 import AppLoader from '../components/Loader.vue';

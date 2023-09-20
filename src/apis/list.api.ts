@@ -1,5 +1,5 @@
 import { fetchRequest } from '../includes/axios.ts';
-import { once } from 'lodash';
+import once from 'lodash/once';
 import { HeadlineRequest, HeadlineResponse, Source } from '../types/list.types.ts';
 
 export interface SourceResponse {

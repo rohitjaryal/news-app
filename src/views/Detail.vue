@@ -36,7 +36,7 @@ import { useRouter } from 'vue-router';
 import useNewsStore from '../stores/news.store.ts';
 import useVisitedNewsStore from '../stores/visitedHeadlines.store.ts';
 import { onMounted, ref } from 'vue';
-import { isNumber } from 'lodash';
+import isNumber from 'lodash/isNumber';
 import { NewsDataStoreInterface } from '../types/list.types.ts';
 
 const router = useRouter();
